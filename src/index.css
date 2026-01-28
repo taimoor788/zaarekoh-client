@@ -1,0 +1,131 @@
+:root {
+  /* Social Blue Palette (Facebook/LinkedIn inspired) */
+  --color-primary: #1877F2;
+  /* FB Blue */
+  --color-primary-hover: #166fe5;
+  --color-secondary: #42b72a;
+  /* Action Green */
+
+  --color-bg-primary: #f0f2f5;
+  /* Light Gray Background */
+  --color-bg-card: #ffffff;
+  /* White Card */
+  --color-bg-nav: #ffffff;
+
+  --color-text-primary: #050505;
+  --color-text-secondary: #65676b;
+  --color-text-accent: #1877F2;
+
+  --color-border: #ced0d4;
+  --color-divider: #e4e6eb;
+
+  --font-family-sans: 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  --radius-card: 8px;
+  --radius-btn: 6px;
+
+  --transition-fast: 0.2s ease;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.6rem 2rem;
+  border-radius: var(--radius-btn);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background var(--transition-fast);
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem;
+}
+
+/* Mobile Friendly Utilities */
+.mobile-text-center {
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.mobile-hide {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
+.mobile-show {
+  display: none !important;
+
+  @media (max-width: 768px) {
+    display: block !important;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.2rem !important;
+  }
+}
