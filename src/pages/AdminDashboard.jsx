@@ -279,7 +279,8 @@ const AdminDashboard = () => {
                 method: 'POST',
                 body: uploadFormData
             });
-            const imagePath = `${BASE_URL}${await res.text()}`;
+            const data = await res.json();
+            const imagePath = data.filePath;
             setFormData(prev => ({
                 ...prev,
                 image: prev.image || imagePath,
