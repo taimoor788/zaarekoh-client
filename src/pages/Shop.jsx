@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
+import { BASE_URL } from '../utils/config';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -8,7 +9,7 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch(`${BASE_URL}/api/products`);
         const data = await response.json();
         setProducts(data);
         setLoading(false);

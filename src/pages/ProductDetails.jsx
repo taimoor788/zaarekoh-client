@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
+import { BASE_URL } from '../utils/config';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -24,7 +25,7 @@ const ProductDetails = () => {
         // Fetch product from mock API
         const fetchProduct = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/products');
+                const response = await fetch(`${BASE_URL}/api/products`);
                 const products = await response.json();
                 const foundProduct = products.find(p => p._id === id);
                 setProduct(foundProduct);

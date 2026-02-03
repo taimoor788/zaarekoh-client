@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../utils/config';
 
 const Learn = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -17,7 +18,7 @@ const Learn = () => {
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/learn');
+                const res = await fetch(`${BASE_URL}/api/learn`);
                 const data = await res.json();
                 setContent(data);
             } catch (error) {

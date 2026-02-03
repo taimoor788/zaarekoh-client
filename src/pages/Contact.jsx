@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MapLocation from '../components/MapLocation';
+import { BASE_URL } from '../utils/config';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ const Contact = () => {
         setLoading(true);
         setStatusMessage('');
         try {
-            const res = await fetch('http://localhost:5000/api/contact', {
+            const res = await fetch(`${BASE_URL}/api/contact`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

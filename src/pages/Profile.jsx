@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/config';
 
 const Profile = () => {
     const { userInfo, logout } = useAuth();
@@ -16,7 +17,7 @@ const Profile = () => {
 
         const fetchOrders = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/orders/myorders', {
+                const res = await fetch(`${BASE_URL}/api/orders/myorders`, {
                     headers: {
                         Authorization: `Bearer ${userInfo.token}`,
                     },

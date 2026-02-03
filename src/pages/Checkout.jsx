@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/config';
 
 const Checkout = () => {
     const { cartItems, getCartTotal, clearCart } = useCart();
@@ -37,7 +38,7 @@ const Checkout = () => {
         setUploading(true);
 
         try {
-            const res = await fetch('http://localhost:5000/api/upload', {
+            const res = await fetch(`${BASE_URL}/api/upload`, {
                 method: 'POST',
                 body: formData,
             });
@@ -82,7 +83,7 @@ const Checkout = () => {
 
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/orders', {
+            const res = await fetch(`${BASE_URL}/api/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

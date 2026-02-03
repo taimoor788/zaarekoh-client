@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/config';
 
 const AdminDashboard = () => {
     const { userInfo } = useAuth();
@@ -60,7 +61,7 @@ const AdminDashboard = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/products');
+            const res = await fetch(`${BASE_URL}/api/products`);
             const data = await res.json();
             setProducts(data);
             setLoading(false);
@@ -73,7 +74,7 @@ const AdminDashboard = () => {
     const fetchOrders = async () => {
         setOrderLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/orders', {
+            const res = await fetch(`${BASE_URL}/api/orders`, {
                 headers: {
                     Authorization: `Bearer ${userInfo.token}`
                 }
@@ -90,7 +91,7 @@ const AdminDashboard = () => {
     const fetchMessages = async () => {
         setMessageLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/contact', {
+            const res = await fetch(`${BASE_URL}/api/contact`, {
                 headers: {
                     Authorization: `Bearer ${userInfo.token}`
                 }
@@ -107,7 +108,7 @@ const AdminDashboard = () => {
     const fetchLearnContent = async () => {
         setLearnLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/learn');
+            const res = await fetch(`${BASE_URL}/api/learn`);
             const data = await res.json();
             setLearnContent(data);
             setLearnLoading(false);
@@ -120,7 +121,7 @@ const AdminDashboard = () => {
     const handleSaveLearn = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/learn', {
+            const res = await fetch(`${BASE_URL}/api/learn`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -140,7 +141,7 @@ const AdminDashboard = () => {
     const deleteMessage = async (id) => {
         if (window.confirm('Are you sure you want to delete this message?')) {
             try {
-                const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+                const res = await fetch(`${BASE_URL}/api/contact/${id}`, {
                     method: 'DELETE',
                     headers: {
                         Authorization: `Bearer ${userInfo.token}`
@@ -161,7 +162,7 @@ const AdminDashboard = () => {
         setSelectedMessage(msg);
         if (!msg.isRead) {
             try {
-                await fetch(`http://localhost:5000/api/contact/${msg._id}/read`, {
+                await fetch(`${BASE_URL}/api/contact/${msg._id}/read`, {
                     method: 'PUT',
                     headers: {
                         Authorization: `Bearer ${userInfo.token}`
@@ -178,7 +179,7 @@ const AdminDashboard = () => {
     const handleStatusUpdate = async (id, newStatus) => {
         setStatusUpdating(true);
         try {
-            const res = await fetch(`http://localhost:5000/api/orders/${id}/status`, {
+            const res = await fetch(`${BASE_URL}/api/orders/${id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -202,7 +203,7 @@ const AdminDashboard = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
-                const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+                const res = await fetch(`${BASE_URL}/api/products/${id}`, {
                     method: 'DELETE'
                 });
                 if (res.ok) {
@@ -236,8 +237,8 @@ const AdminDashboard = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const url = editingProduct
-            ? `http://localhost:5000/api/products/${editingProduct._id}`
-            : 'http://localhost:5000/api/products';
+            ? `${BASE_URL}/api/products/${editingProduct._id}`
+            : `${BASE_URL}/api/products`;
         const method = editingProduct ? 'PUT' : 'POST';
 
         try {
@@ -274,11 +275,11 @@ const AdminDashboard = () => {
         uploadFormData.append('image', file);
         setUploading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/products/upload', {
+            const res = await fetch(`${BASE_URL}/api/products/upload`, {
                 method: 'POST',
                 body: uploadFormData
             });
-            const imagePath = `http://localhost:5000${await res.text()}`;
+            const imagePath = `${BASE_URL}${await res.text()}`;
             setFormData(prev => ({
                 ...prev,
                 image: prev.image || imagePath,
@@ -305,7 +306,7 @@ const AdminDashboard = () => {
         if (window.confirm('Are you sure you want to approve this payment?')) {
             try {
                 // Update isPaid to true, and status to Processing
-                const res = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+                const res = await fetch(`${BASE_URL}/api/orders/${orderId}/status`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
