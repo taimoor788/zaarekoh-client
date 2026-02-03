@@ -225,7 +225,7 @@ const AdminDashboard = () => {
             image: product.image,
             images: product.images || [product.image],
             category: product.category,
-            countInStock: product.countInStock,
+            // countInStock: product.countInStock,
             countInStock: product.countInStock,
             size: product.size || '',
             highlights: product.highlights ? product.highlights.join('\n') : ''
