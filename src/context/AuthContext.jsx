@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     );
 
     const login = async (email, password) => {
-        const res = await fetch('${BASE_URL}/api/users/login', {
+        const res = await fetch(`${BASE_URL}/api/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (name, email, password) => {
-        const res = await fetch('${BASE_URL}/api/users', {
+        const res = await fetch(`${BASE_URL}/api/users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
