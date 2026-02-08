@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../utils/config';
 
 const ProductCard = ({ product }) => {
 
@@ -77,7 +78,11 @@ const ProductCard = ({ product }) => {
         >
             <Link to={`/product/${product._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div style={styles.imageContainer}>
-                    <img src={product.image || 'https://via.placeholder.com/300'} alt={product.name} style={styles.image} />
+                    <img
+                        src={product.image?.startsWith('/images') ? product.image : (product.image?.startsWith('http') ? product.image : `${BASE_URL}${product.image}`)}
+                        alt={product.name}
+                        style={styles.image}
+                    />
                 </div>
             </Link>
             <div style={styles.content}>

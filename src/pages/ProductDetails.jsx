@@ -92,7 +92,7 @@ const ProductDetails = () => {
                         }}
                     >
                         <img
-                            src={selectedImage || product.image}
+                            src={(selectedImage || product.image)?.startsWith('/images') ? (selectedImage || product.image) : ((selectedImage || product.image)?.startsWith('http') ? (selectedImage || product.image) : `${BASE_URL}${selectedImage || product.image}`)}
                             alt={product.name}
                             style={{
                                 width: '100%',
@@ -166,7 +166,7 @@ const ProductDetails = () => {
                             {product.images.map((img, index) => (
                                 <img
                                     key={index}
-                                    src={img}
+                                    src={img?.startsWith('/images') ? img : (img?.startsWith('http') ? img : `${BASE_URL}${img}`)}
                                     alt={`${product.name} view ${index + 1}`}
                                     onClick={() => setSelectedImage(img)}
                                     style={{
