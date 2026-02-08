@@ -33,8 +33,6 @@ const AdminDashboard = () => {
         images: [],
         category: '',
         countInStock: '',
-        category: '',
-        countInStock: '',
         size: '',
         highlights: ''
     });
@@ -61,7 +59,7 @@ const AdminDashboard = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch(`${BASE_URL} /api/products`);
+            const res = await fetch(`${BASE_URL}/api/products`);
             const data = await res.json();
             setProducts(data);
             setLoading(false);
@@ -74,9 +72,9 @@ const AdminDashboard = () => {
     const fetchOrders = async () => {
         setOrderLoading(true);
         try {
-            const res = await fetch(`${BASE_URL} /api/orders`, {
+            const res = await fetch(`${BASE_URL}/api/orders`, {
                 headers: {
-                    Authorization: `Bearer ${userInfo.token} `
+                    Authorization: `Bearer ${userInfo.token}`
                 }
             });
             const data = await res.json();
@@ -91,9 +89,9 @@ const AdminDashboard = () => {
     const fetchMessages = async () => {
         setMessageLoading(true);
         try {
-            const res = await fetch(`${BASE_URL} /api/contact`, {
+            const res = await fetch(`${BASE_URL}/api/contact`, {
                 headers: {
-                    Authorization: `Bearer ${userInfo.token} `
+                    Authorization: `Bearer ${userInfo.token}`
                 }
             });
             const data = await res.json();
@@ -108,7 +106,7 @@ const AdminDashboard = () => {
     const fetchLearnContent = async () => {
         setLearnLoading(true);
         try {
-            const res = await fetch(`${BASE_URL} /api/learn`);
+            const res = await fetch(`${BASE_URL}/api/learn`);
             const data = await res.json();
             setLearnContent(data);
             setLearnLoading(false);
@@ -121,11 +119,11 @@ const AdminDashboard = () => {
     const handleSaveLearn = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`${BASE_URL} /api/learn`, {
+            const res = await fetch(`${BASE_URL}/api/learn`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${userInfo.token} `
+                    Authorization: `Bearer ${userInfo.token}`
                 },
                 body: JSON.stringify(learnContent)
             });
@@ -141,10 +139,10 @@ const AdminDashboard = () => {
     const deleteMessage = async (id) => {
         if (window.confirm('Are you sure you want to delete this message?')) {
             try {
-                const res = await fetch(`${BASE_URL} /api/contact / ${id} `, {
+                const res = await fetch(`${BASE_URL}/api/contact/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        Authorization: `Bearer ${userInfo.token} `
+                        Authorization: `Bearer ${userInfo.token}`
                     }
                 });
                 if (res.ok) {
@@ -162,7 +160,7 @@ const AdminDashboard = () => {
         setSelectedMessage(msg);
         if (!msg.isRead) {
             try {
-                await fetch(`${BASE_URL} /api/contact / ${msg._id}/read`, {
+                await fetch(`${BASE_URL}/api/contact/${msg._id}/read`, {
                     method: 'PUT',
                     headers: {
                         Authorization: `Bearer ${userInfo.token}`
@@ -1046,7 +1044,7 @@ const AdminDashboard = () => {
                     </div>
                 )
             }
-        </div >
+        </div>
     );
 };
 
