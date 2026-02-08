@@ -204,7 +204,10 @@ const AdminDashboard = () => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
                 const res = await fetch(`${BASE_URL}/api/products/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${userInfo.token}`
+                    }
                 });
                 if (res.ok) {
                     setMessage('Product deleted successfully');
@@ -244,8 +247,10 @@ const AdminDashboard = () => {
         try {
             const res = await fetch(url, {
                 method,
-                // headers: { 'Content-Type': 'application/json' },
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${userInfo.token}`
+                },
                 body: JSON.stringify({
                     ...formData,
                     highlights: formData.highlights.split('\n').filter(h => h.trim() !== '')
@@ -275,8 +280,11 @@ const AdminDashboard = () => {
         uploadFormData.append('image', file);
         setUploading(true);
         try {
-            const res = await fetch(`${BASE_URL}/api/products/upload`, {
+            const res = await fetch(`${BASE_URL}/api/upload`, {
                 method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                },
                 body: uploadFormData
             });
             const data = await res.json();
