@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
-import { BASE_URL } from '../utils/config';
+import { resolveImageUrl } from '../utils/config';
 
 const Cart = () => {
     const { cartItems, removeFromCart, updateQty, getCartTotal } = useCart();
@@ -47,7 +47,7 @@ const Cart = () => {
                             borderBottom: '1px solid var(--color-border)'
                         }}>
                             <img
-                                src={item.image?.startsWith('/images') ? item.image : (item.image?.startsWith('http') ? item.image : `${BASE_URL}${item.image}`)}
+                                src={resolveImageUrl(item.image)}
                                 alt={item.name}
                                 style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
                             />

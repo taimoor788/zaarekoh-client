@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
-import { BASE_URL } from '../utils/config';
+import { BASE_URL, resolveImageUrl } from '../utils/config';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -92,7 +92,7 @@ const ProductDetails = () => {
                         }}
                     >
                         <img
-                            src={(selectedImage || product.image)?.startsWith('/images') ? (selectedImage || product.image) : ((selectedImage || product.image)?.startsWith('http') ? (selectedImage || product.image) : `${BASE_URL}${selectedImage || product.image}`)}
+                            src={resolveImageUrl(selectedImage || product.image)}
                             alt={product.name}
                             style={{
                                 width: '100%',
@@ -166,7 +166,7 @@ const ProductDetails = () => {
                             {product.images.map((img, index) => (
                                 <img
                                     key={index}
-                                    src={img?.startsWith('/images') ? img : (img?.startsWith('http') ? img : `${BASE_URL}${img}`)}
+                                    src={resolveImageUrl(img)}
                                     alt={`${product.name} view ${index + 1}`}
                                     onClick={() => setSelectedImage(img)}
                                     style={{
