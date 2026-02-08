@@ -989,7 +989,7 @@ const AdminDashboard = () => {
                                     <h4 style={{ color: '#888' }}>Payment Info</h4>
                                     <p>Method: <strong>{selectedOrder.paymentMethod}</strong></p>
                                     <p>Payment Status: <strong style={{ color: selectedOrder.isPaid ? 'green' : 'orange' }}>{selectedOrder.isPaid ? 'Paid' : 'Pending'}</strong></p>
-                                    <p>Order Status: <strong style={{ color: 'var(--color-primary)' }}>{selectedOrder.status}</strong></p>
+                                    <p>Shipping Status: <strong style={{ color: 'var(--color-primary)' }}>{selectedOrder.status}</strong></p>
 
                                     <h4 style={{ color: '#888', marginTop: '1rem' }}>Update Status</h4>
                                     <select defaultValue={selectedOrder.status} onChange={(e) => handleStatusUpdate(selectedOrder._id, e.target.value)} disabled={statusUpdating} style={styles.input}>
@@ -1007,8 +1007,12 @@ const AdminDashboard = () => {
                             {selectedOrder.paymentMethod === 'Manual' && selectedOrder.paymentScreenshot && (
                                 <div style={{ marginBottom: '1rem' }}>
                                     <h4 style={{ color: '#888' }}>Payment Screenshot</h4>
-                                    <a href={`http://localhost:5000${selectedOrder.paymentScreenshot}`} target="_blank" rel="noopener noreferrer">
-                                        <img src={`http://localhost:5000${selectedOrder.paymentScreenshot}`} alt="Payment Screenshot" style={styles.screenshotImg} />
+                                    <a href={selectedOrder.paymentScreenshot.startsWith('http') ? selectedOrder.paymentScreenshot : `${BASE_URL}${selectedOrder.paymentScreenshot}`} target="_blank" rel="noopener noreferrer">
+                                        <img
+                                            src={selectedOrder.paymentScreenshot.startsWith('http') ? selectedOrder.paymentScreenshot : `${BASE_URL}${selectedOrder.paymentScreenshot}`}
+                                            alt="Payment Screenshot"
+                                            style={styles.screenshotImg}
+                                        />
                                     </a>
                                     {!selectedOrder.isPaid && (
                                         <button

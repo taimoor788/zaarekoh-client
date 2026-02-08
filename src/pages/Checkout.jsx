@@ -90,9 +90,23 @@ const Checkout = () => {
                     Authorization: `Bearer ${userInfo.token}`, // Use actual user token
                 },
                 body: JSON.stringify({
-                    orderItems: cartItems, // Use cartItems from context
-                    shippingAddress: formData,
-                    totalPrice: total, // Use total from getCartTotal()
+                    orderItems: cartItems.map(item => ({
+                        name: item.name,
+                        qty: item.qty,
+                        image: item.image,
+                        price: item.price,
+                        product: item._id
+                    })),
+                    shippingAddress: {
+                        name: formData.name,
+                        address: formData.address,
+                        city: formData.city,
+                        phone: formData.phone,
+                    },
+                    itemsPrice: total,
+                    shippingPrice: 0,
+                    taxPrice: 0,
+                    totalPrice: total,
                     paymentMethod,
                     paymentScreenshot: paymentMethod === 'Manual' ? paymentScreenshot : null,
                 }),
@@ -261,7 +275,7 @@ const Checkout = () => {
                                     <ul style={{ listStyle: 'none', padding: 0, marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                         <li><strong>EasyPaisa:</strong> 0348-9530572 (Taimoor Jan)</li>
                                         <li><strong>JazzCash:</strong> 0348-9530572 (Taimoor Jan)</li>
-                                        <li><strong>HBL Bank:</strong> 1234-5678-9012-3456 (Taimoor Jan)</li>
+                                        <li><strong>HBL Bank:</strong> PK10HABB0003557900420603 (Taimoor Jan)</li>
                                     </ul>
                                     <p style={{ marginBottom: '0.5rem' }}>Upload Payment Screenshot:</p>
                                     <input

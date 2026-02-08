@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLoading } from '../context/LoadingContext';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -11,8 +12,21 @@ const Register = () => {
     const [error, setError] = useState('');
 
     const { register, userInfo } = useAuth();
+    const { showLoading, hideLoading } = useLoading();
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Clear inputs on mount to ensure fresh state and bypass browser auto-fill
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setName('');
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+            setError('');
+        }, 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     const redirect = location.search ? location.search.split('=')[1] : '/';
 
@@ -35,8 +49,18 @@ const Register = () => {
             return;
         }
 
+        showLoading();
         const result = await register(name, email, password);
-        if (!result.success) {
+        hideLoading();
+
+        if (result.success) {
+            setName('');
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+            setError('');
+            navigate(redirect); // Direct navigation after success
+        } else {
             setError(result.message);
         }
     };
@@ -102,7 +126,7 @@ const Register = () => {
             <div style={styles.container}>
                 <h1 style={styles.title}>Join Zaar-e-Koh</h1>
                 {error && <div style={styles.error}>{error}</div>}
-                <form style={styles.form} onSubmit={handleSubmit}>
+                <form style={styles.form} onSubmit={handleSubmit} autoComplete="off">
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Full Name</label>
                         <input
@@ -112,6 +136,7 @@ const Register = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
+                            autoComplete="name"
                         />
                     </div>
                     <div style={styles.inputGroup}>
@@ -123,6 +148,7 @@ const Register = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            autoComplete="username"
                         />
                     </div>
                     <div style={styles.inputGroup}>
@@ -135,6 +161,7 @@ const Register = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                autoComplete="new-password"
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}

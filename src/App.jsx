@@ -20,40 +20,43 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { LoadingProvider } from './context/LoadingContext';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <AuthProvider>
-      <CartProvider>
-        <Router>
-          <ScrollToTop />
-          <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <Navbar />
-            <main style={{ flex: 1, marginTop: '72px' }}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/learn" element={<Learn />} />
-                <Route path="/product/:id" element={<ProductDetails />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/order-success" element={<OrderSuccess />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-conditions" element={<TermsConditions />} />
-                <Route path="/shipping-returns" element={<ShippingReturns />} />
-                <Route path="/admin" element={<AdminDashboard />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </Router>
-      </CartProvider>
+      <LoadingProvider>
+        <CartProvider>
+          <Router>
+            <ScrollToTop />
+            <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+              <Navbar />
+              <main style={{ flex: 1, marginTop: '72px' }}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/learn" element={<Learn />} />
+                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/order-success" element={<OrderSuccess />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-conditions" element={<TermsConditions />} />
+                  <Route path="/shipping-returns" element={<ShippingReturns />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </Router>
+        </CartProvider>
+      </LoadingProvider>
     </AuthProvider>
   );
 }

@@ -110,9 +110,9 @@ const Profile = () => {
                                                 color: order.isPaid ? 'var(--color-success, #52c41a)' : 'var(--color-warning, #faad14)',
                                                 border: `1px solid ${order.isPaid ? '#b7eb8f' : '#ffe58f'}`
                                             }}>
-                                                {order.isPaid ? 'Paid' : 'Payment Pending'}
+                                                Payment: {order.isPaid ? 'Paid' : 'Pending'}
                                             </span>
-                                            <span style={styles.badge}>{order.status}</span>
+                                            <span style={styles.badge}>Shipping: {order.status}</span>
                                         </div>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

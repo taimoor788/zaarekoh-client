@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLoading } from '../context/LoadingContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -9,8 +10,19 @@ const Login = () => {
     const [error, setError] = useState('');
 
     const { login, userInfo } = useAuth();
+    const { showLoading, hideLoading } = useLoading();
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Clear inputs on mount to ensure fresh state and bypass browser auto-fill
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setEmail('');
+            setPassword('');
+            setError('');
+        }, 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     const redirect = location.search ? location.search.split('=')[1] : '/';
 
@@ -29,8 +41,16 @@ const Login = () => {
             return;
         }
 
+        showLoading();
         const result = await login(email, password);
-        if (!result.success) {
+        hideLoading();
+
+        if (result.success) {
+            setEmail('');
+            setPassword('');
+            setError('');
+            navigate(redirect); // Direct navigation after success
+        } else {
             setError(result.message);
             setPassword(''); // Clear password on error as requested
         }
@@ -97,7 +117,7 @@ const Login = () => {
             <div style={styles.container}>
                 <h1 style={styles.title}>Welcome Back</h1>
                 {error && <div style={styles.error}>{error}</div>}
-                <form style={styles.form} onSubmit={handleSubmit}>
+                <form style={styles.form} onSubmit={handleSubmit} autoComplete="off">
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Email Address</label>
                         <input
@@ -107,6 +127,7 @@ const Login = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            autoComplete="username"
                         />
                     </div>
                     <div style={styles.inputGroup}>
@@ -119,6 +140,7 @@ const Login = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                autoComplete="current-password"
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}
