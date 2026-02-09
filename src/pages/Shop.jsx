@@ -23,7 +23,32 @@ const Shop = () => {
   }, []);
 
   if (loading) {
-    return <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-text-primary)' }}>Loading...</div>;
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '60vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <div className="spinner" style={{
+          width: '50px',
+          height: '50px',
+          border: '3px solid rgba(197, 161, 89, 0.1)',
+          borderTop: '3px solid var(--color-primary)',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }}></div>
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem', letterSpacing: '1px' }}>LOADING COLLECTION</p>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
   }
 
   return (

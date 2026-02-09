@@ -14,6 +14,7 @@ const ProductDetails = () => {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [touchStart, setTouchStart] = useState(null);
+    const [isZooming, setIsZooming] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -52,9 +53,37 @@ const ProductDetails = () => {
 
     const handleTouchStart = (e) => {
         setTouchStart(e.targetTouches[0].clientX);
+        setIsZooming(true);
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isZooming) return;
+        const touch = e.targetTouches[0];
+        const container = e.currentTarget;
+        const { left, top, width, height } = container.getBoundingClientRect();
+
+        // Calculate percentage within the container
+        const x = ((touch.clientX - left) / width) * 100;
+        const y = ((touch.clientY - top) / height) * 100;
+
+        // Clamp values between 0 and 100
+        const clampedX = Math.max(0, Math.min(100, x));
+        const clampedY = Math.max(0, Math.min(100, y));
+
+        const img = container.querySelector('img');
+        if (img) {
+            img.style.transformOrigin = `${clampedX}% ${clampedY}%`;
+            img.style.transform = 'scale(1.5)';
+        }
     };
 
     const handleTouchEnd = (e) => {
+        setIsZooming(false);
+        const img = e.currentTarget.querySelector('img');
+        if (img) {
+            img.style.transform = 'scale(1)';
+        }
+
         if (!touchStart) return;
         const touchEnd = e.changedTouches[0].clientX;
         const distance = touchStart - touchEnd;
@@ -90,6 +119,7 @@ const ProductDetails = () => {
                 <div>
                     <div
                         onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
                         onTouchEnd={handleTouchEnd}
                         style={{
                             borderRadius: '12px',
