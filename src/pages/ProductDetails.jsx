@@ -13,6 +13,7 @@ const ProductDetails = () => {
     const [selectedImage, setSelectedImage] = useState('');
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [touchStart, setTouchStart] = useState(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -49,21 +50,47 @@ const ProductDetails = () => {
         navigate('/checkout');
     };
 
+    const handleTouchStart = (e) => {
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = (e) => {
+        if (!touchStart) return;
+        const touchEnd = e.changedTouches[0].clientX;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+
+        if (isLeftSwipe || isRightSwipe) {
+            const currentIndex = product.images.indexOf(selectedImage || product.image);
+            if (isLeftSwipe) {
+                const nextIndex = (currentIndex + 1) % product.images.length;
+                setSelectedImage(product.images[nextIndex]);
+            } else {
+                const prevIndex = (currentIndex - 1 + product.images.length) % product.images.length;
+                setSelectedImage(product.images[prevIndex]);
+            }
+        }
+        setTouchStart(null);
+    };
+
     if (loading) return <div className="container" style={{ padding: '4rem' }}>Loading...</div>;
     if (!product) return <div className="container" style={{ padding: '4rem' }}>Product not found</div>;
 
     return (
-        <div className="container" style={{ padding: '2rem 1rem' }}>
+        <div className="container" style={{ padding: isMobile ? '1rem' : '2rem 1rem' }}>
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                gap: isMobile ? '2rem' : '4rem',
+                gap: isMobile ? '1.5rem' : '4rem',
                 alignItems: 'start',
                 marginTop: '1rem'
             }}>
                 {/* Image Section */}
                 <div>
                     <div
+                        onTouchStart={handleTouchStart}
+                        onTouchEnd={handleTouchEnd}
                         style={{
                             borderRadius: '12px',
                             overflow: 'hidden',
@@ -72,23 +99,29 @@ const ProductDetails = () => {
                             aspectRatio: '1/1',
                             background: '#f5f5f5',
                             position: 'relative',
-                            cursor: 'zoom-in'
+                            cursor: isMobile ? 'default' : 'zoom-in'
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.querySelector('img').style.transform = 'scale(1.3)';
-                            e.currentTarget.querySelector('.nav-btn-prev').style.opacity = '1';
-                            e.currentTarget.querySelector('.nav-btn-next').style.opacity = '1';
+                            if (!isMobile) {
+                                e.currentTarget.querySelector('img').style.transform = 'scale(1.3)';
+                                e.currentTarget.querySelector('.nav-btn-prev').style.opacity = '1';
+                                e.currentTarget.querySelector('.nav-btn-next').style.opacity = '1';
+                            }
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-                            e.currentTarget.querySelector('.nav-btn-prev').style.opacity = '0';
-                            e.currentTarget.querySelector('.nav-btn-next').style.opacity = '0';
+                            if (!isMobile) {
+                                e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+                                e.currentTarget.querySelector('.nav-btn-prev').style.opacity = '0';
+                                e.currentTarget.querySelector('.nav-btn-next').style.opacity = '0';
+                            }
                         }}
                         onMouseMove={(e) => {
-                            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
-                            const x = ((e.pageX - left) / width) * 100;
-                            const y = ((e.pageY - top) / height) * 100;
-                            e.currentTarget.querySelector('img').style.transformOrigin = `${x}% ${y}%`;
+                            if (!isMobile) {
+                                const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+                                const x = ((e.pageX - left) / width) * 100;
+                                const y = ((e.pageY - top) / height) * 100;
+                                e.currentTarget.querySelector('img').style.transformOrigin = `${x}% ${y}%`;
+                            }
                         }}
                     >
                         <img
@@ -117,16 +150,17 @@ const ProductDetails = () => {
                                 left: '10px',
                                 top: '50%',
                                 transform: 'translateY(-50%)',
-                                background: 'rgba(255, 255, 255, 0.8)',
+                                background: 'rgba(255, 255, 255, 0.9)',
                                 border: 'none',
                                 borderRadius: '50%',
-                                width: '40px',
-                                height: '40px',
+                                width: isMobile ? '45px' : '40px',
+                                height: isMobile ? '45px' : '40px',
                                 cursor: 'pointer',
-                                fontSize: '1.2rem',
-                                opacity: 0,
+                                fontSize: '1.5rem',
+                                opacity: isMobile ? 1 : 0,
                                 transition: 'opacity 0.2s',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                                zIndex: 2
                             }}
                         >
                             &#8249;
@@ -144,16 +178,17 @@ const ProductDetails = () => {
                                 right: '10px',
                                 top: '50%',
                                 transform: 'translateY(-50%)',
-                                background: 'rgba(255, 255, 255, 0.8)',
+                                background: 'rgba(255, 255, 255, 0.9)',
                                 border: 'none',
                                 borderRadius: '50%',
-                                width: '40px',
-                                height: '40px',
+                                width: isMobile ? '45px' : '40px',
+                                height: isMobile ? '45px' : '40px',
                                 cursor: 'pointer',
-                                fontSize: '1.2rem',
-                                opacity: 0,
+                                fontSize: '1.5rem',
+                                opacity: isMobile ? 1 : 0,
                                 transition: 'opacity 0.2s',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                                zIndex: 2
                             }}
                         >
                             &#8250;
@@ -162,7 +197,7 @@ const ProductDetails = () => {
 
                     {/* Gallery Thumbnails */}
                     {product.images && product.images.length > 0 && (
-                        <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                        <div style={{ display: 'flex', gap: '0.75rem', overflowX: 'auto', paddingBottom: '0.5rem', scrollbarWidth: 'none' }}>
                             {product.images.map((img, index) => (
                                 <img
                                     key={index}
@@ -170,24 +205,15 @@ const ProductDetails = () => {
                                     alt={`${product.name} view ${index + 1}`}
                                     onClick={() => setSelectedImage(img)}
                                     style={{
-                                        width: '80px',
-                                        height: '80px',
+                                        width: isMobile ? '70px' : '80px',
+                                        height: isMobile ? '70px' : '80px',
                                         objectFit: 'cover',
                                         borderRadius: '8px',
                                         cursor: 'pointer',
                                         border: (selectedImage || product.image) === img ? '2px solid var(--color-primary)' : '2px solid transparent',
                                         opacity: (selectedImage || product.image) === img ? 1 : 0.6,
                                         transition: 'all 0.2s',
-                                        transform: (selectedImage || product.image) === img ? 'scale(1.05)' : 'scale(1)'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.target.style.opacity = 1;
-                                        e.target.style.transform = 'scale(1.05)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        const isSelected = (selectedImage || product.image) === img;
-                                        e.target.style.opacity = isSelected ? 1 : 0.6;
-                                        e.target.style.transform = isSelected ? 'scale(1.05)' : 'scale(1)';
+                                        flexShrink: 0
                                     }}
                                 />
                             ))}
@@ -197,9 +223,9 @@ const ProductDetails = () => {
 
                 {/* Details Section */}
                 <div>
-                    <div style={{ marginBottom: '2rem' }}>
-                        <h1 style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--color-primary)' }}>{product.name}</h1>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '1.5rem', fontSize: '0.95rem', color: 'var(--color-text-secondary)' }}>
+                    <div style={{ marginBottom: isMobile ? '1.5rem' : '2rem' }}>
+                        <h1 style={{ fontSize: isMobile ? '2rem' : '3rem', marginBottom: '0.5rem', color: 'var(--color-primary)' }}>{product.name}</h1>
+                        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'start' : 'center', gap: isMobile ? '0.5rem' : '2rem', marginBottom: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
                             <span>Brand: <strong style={{ color: 'var(--color-text-primary)' }}>Zaar-e-Koh</strong></span>
                             <span>Size: <strong style={{ color: 'var(--color-text-primary)' }}>{product.size || 'Standard'}</strong></span>
                             <span>
@@ -209,29 +235,30 @@ const ProductDetails = () => {
                                 </strong>
                             </span>
                         </div>
-                        <p style={{ fontSize: '1.5rem', color: 'var(--color-text-accent)', fontWeight: 'bold' }}>
+                        <p style={{ fontSize: isMobile ? '1.5rem' : '1.75rem', color: 'var(--color-text-accent)', fontWeight: 'bold' }}>
                             Rs. {product.price}
                         </p>
                     </div>
 
-                    <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--color-text-secondary)', marginBottom: '3rem' }}>
+                    <p style={{ fontSize: isMobile ? '1rem' : '1.1rem', lineHeight: '1.6', color: 'var(--color-text-secondary)', marginBottom: isMobile ? '2rem' : '3rem' }}>
                         {product.description}
                     </p>
 
-                    <div style={{ display: 'flex', alignItems: 'end', gap: '1.5rem', marginBottom: '2rem' }}>
-                        <div>
+                    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'end', gap: '1rem', marginBottom: '2rem' }}>
+                        <div style={{ flex: isMobile ? 'none' : 1 }}>
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem' }}>Quantity</label>
                             <select
+                                defaultValue="1"
+                                className="qty-select"
                                 style={{
-                                    padding: '0.9rem',
-                                    width: '80px',
+                                    padding: '0.8rem',
+                                    width: isMobile ? '100%' : '80px',
                                     borderRadius: '6px',
                                     border: '1px solid var(--color-border)',
                                     backgroundColor: 'var(--color-bg-card)',
                                     color: 'var(--color-text-primary)',
                                     cursor: 'pointer'
                                 }}
-                                onClick={(e) => e.stopPropagation()}
                             >
                                 {[...Array(Math.min(product.countInStock || 0, 10)).keys()].map(x => (
                                     <option key={x + 1} value={x + 1}>{x + 1}</option>
@@ -240,9 +267,9 @@ const ProductDetails = () => {
                         </div>
                         <button
                             className="btn-primary"
-                            style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
+                            style={{ padding: '0.9rem 2rem', fontSize: '1rem', flex: 2 }}
                             onClick={() => {
-                                const qty = Number(document.querySelector('select').value);
+                                const qty = Number(document.querySelector('.qty-select').value);
                                 addToCart({ ...product, qty });
                             }}
                             disabled={product.countInStock === 0}
@@ -252,16 +279,17 @@ const ProductDetails = () => {
                         <button
                             className="btn-primary"
                             style={{
-                                padding: '1rem 2.5rem',
-                                fontSize: '1.1rem',
+                                padding: '0.9rem 2rem',
+                                fontSize: '1rem',
                                 backgroundColor: '#2a2a2a',
                                 borderColor: '#2a2a2a',
+                                flex: 2,
                                 opacity: product.countInStock === 0 ? 0.5 : 1,
                                 cursor: product.countInStock === 0 ? 'not-allowed' : 'pointer'
                             }}
                             onClick={() => {
                                 if (product.countInStock > 0) {
-                                    const qty = Number(document.querySelector('select').value);
+                                    const qty = Number(document.querySelector('.qty-select').value);
                                     addToCart({ ...product, qty });
                                     navigate('/checkout');
                                 }
@@ -272,9 +300,9 @@ const ProductDetails = () => {
                         </button>
                     </div>
 
-                    <div style={{ marginTop: '3rem', padding: '2rem', backgroundColor: 'var(--color-bg-primary)', borderRadius: '8px' }}>
-                        <h3 style={{ marginBottom: '1rem' }}>Product Highlights</h3>
-                        <ul style={{ listStylePosition: 'inside', lineHeight: '1.6' }}>
+                    <div style={{ marginTop: isMobile ? '2rem' : '3rem', padding: '1.5rem', backgroundColor: 'var(--color-bg-primary)', borderRadius: '8px' }}>
+                        <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Product Highlights</h3>
+                        <ul style={{ listStylePosition: 'inside', lineHeight: '1.8', fontSize: '0.95rem' }}>
                             {product.highlights && product.highlights.length > 0 ? (
                                 product.highlights.map((highlight, index) => (
                                     <li key={index}>{highlight}</li>
@@ -293,9 +321,9 @@ const ProductDetails = () => {
             </div>
 
             {/* Related Products Section */}
-            <div style={{ marginTop: '6rem', borderTop: '1px solid var(--color-border)', paddingTop: '4rem' }}>
-                <h2 style={{ fontSize: '2rem', marginBottom: '2rem', color: 'var(--color-primary)' }}>Related Products</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '2rem' }}>
+            <div style={{ marginTop: isMobile ? '4rem' : '6rem', borderTop: '1px solid var(--color-border)', paddingTop: isMobile ? '2rem' : '4rem' }}>
+                <h2 style={{ fontSize: isMobile ? '1.5rem' : '2rem', marginBottom: '1.5rem', color: 'var(--color-primary)' }}>Related Products</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: isMobile ? '1rem' : '2rem' }}>
                     {relatedProducts.map(product => (
                         <ProductCard key={product._id} product={product} />
                     ))}
