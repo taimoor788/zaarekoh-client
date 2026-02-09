@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
+import Loader from '../components/Loader';
 import { BASE_URL, resolveImageUrl } from '../utils/config';
 
 const ProductDetails = () => {
@@ -103,7 +104,7 @@ const ProductDetails = () => {
         setTouchStart(null);
     };
 
-    if (loading) return <div className="container" style={{ padding: '4rem' }}>Loading...</div>;
+    if (loading) return <Loader />;
     if (!product) return <div className="container" style={{ padding: '4rem' }}>Product not found</div>;
 
     return (
